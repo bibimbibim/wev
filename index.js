@@ -1,10 +1,11 @@
 const express = require("express");
 const app = express();
+const puppeteer = require("puppeteer")
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-async function run() {
+async function run(num) {
     let dictURL = {};
 
     const browser = await puppeteer.launch({ headless: false });
@@ -42,7 +43,7 @@ async function run() {
     await page.keyboard.down("Enter");
 
     await page.waitForNavigation();
-    await page.goto("https://weverse.io/fromis9/live/2-119928500");
+    await page.goto(`https://weverse.io/fromis9/live/${num}`);
 
     page.on("response", (res) => {
         const url = res.url();
@@ -75,9 +76,9 @@ app.get("/", (req, res) => {
     res.send("연결 성공!");
 });
 
-app.get("/api/url/:url", (req, res) => {
-    const url = req.params.url;
-    const info = run();
+app.get("/api/url/:num", (req, res) => {
+    const num = req.params.num;
+    const info = run(num);
     console.log(url, info);
 
     res.json({
