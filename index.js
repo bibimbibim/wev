@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const puppeteer = require("puppeteer");
+const chromium = require('chrome-aws-lambda')
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -8,7 +9,13 @@ app.use(express.urlencoded({ extended: true }));
 let file_url = "";
 async function run(num) {
     return new Promise(async (resolve) => {
-        const browser = await puppeteer.launch({ headless: "new" });
+
+        const executablePath = await chromium.executablePath
+        const browser = await chromium.puppeteer.launch({
+            args: await chromium.args,
+            executablePath: executablePath || process.env.PUPPETEER_EXECUTABLE_PATH,
+            headless: true,
+          })
         const page = await browser.newPage();
         await page.goto("https://weverse.io", { waitUntil: "networkidle2" });
         const id = "letsgo2310@protonmail.com";
