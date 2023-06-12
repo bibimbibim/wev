@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
 const chromium = require('chrome-aws-lambda')
 
 app.use(express.json());
